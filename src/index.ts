@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 import fs from 'fs';
+import os from 'os';
 import npmLogin from 'npm-cli-login';
 import child_process from 'child_process';
 import yargs from 'yargs/yargs';
-import gitignoreParser from 'gitignore-parser';
 import retry from 'retry';
 import { rimrafSync } from 'rimraf';
 import { hideBin } from 'yargs/helpers';
@@ -90,9 +90,8 @@ const retryGetNpmFile = (path: string): Promise<string> => {
   npmrcsCreateProfile(npmrcsDirectory, 'local');
 
   const gitignorePath = '.gitignore';
-  const gitignore = gitignoreParser.compile(fs.readFileSync(gitignorePath, 'utf8'));
 
-  if (gitignore.accepts(npmrcsDirectory) === true) {
+  if (!/\.npmrcs/.test(fs.readFileSync(gitignorePath, 'utf8'))) {
     fs.appendFileSync(gitignorePath, '\n.npmrcs');
   }
   npmLogin(localUsername, localPassword, localEmail, localRegistry, scope, false, '.npmrc_local');
