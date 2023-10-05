@@ -1,0 +1,30 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - "**"
+
+  workflow_dispatch:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.18.1
+          cache: 'yarn'
+
+      - name: Create NPMRC
+        run: |
+            echo "//npm.pkg.github.com/:_authToken=${{ secrets.H3_NPM_TOKEN }}" >> ~/.npmrc
+            echo "@h3aven-labs:registry=https://npm.pkg.github.com" >> ~/.npmrc
+            echo 'registry "https://registry.yarnpkg.com"' >> ~/.yarnrc
+
+      - run: yarn install
+      - run: yarn test:coverage
