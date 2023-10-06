@@ -110,4 +110,7 @@ const retryGetNpmFile = (path: string): Promise<string> => {
   rimrafSync('.npmrc_default');
 
   npmrcsChangeProfile(npmrcsDirectory, 'default');
+
+  fs.rmSync('.npmrc');
+  fs.copyFileSync(`${npmrcsDirectory}/default`, '.npmrc');
 })();
