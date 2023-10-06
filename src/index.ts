@@ -109,5 +109,5 @@ const retryGetNpmFile = (path: string): Promise<string> => {
   rimrafSync('.npmrc_local');
   rimrafSync('.npmrc_default');
 
-  npmrcsChangeProfile(npmrcsDirectory, 'local');
+  npmrcsChangeProfile(npmrcsDirectory, 'default');
 })();
